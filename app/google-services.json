@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "119261540493",
+    "project_id": "topshiriq-d1d6b",
+    "storage_bucket": "topshiriq-d1d6b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119261540493:android:64915e2148b0e10a9bf2c4",
+        "android_client_info": {
+          "package_name": "app.app.topshiriq"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119261540493-7ehnm781kfg1865g5sdee3f1l1hvsvmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpLBoQ6nzSQ6QF5pupKeS4ytkHGc_9NKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119261540493-7ehnm781kfg1865g5sdee3f1l1hvsvmc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
