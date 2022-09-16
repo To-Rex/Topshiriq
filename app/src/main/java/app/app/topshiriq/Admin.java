@@ -1,5 +1,6 @@
 package app.app.topshiriq;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -10,15 +11,16 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.password4j.Hash;
-import com.password4j.PBKDF2Function;
-import com.password4j.Password;
-import com.password4j.types.Hmac;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Admin extends AppCompatActivity {
 
@@ -40,34 +42,74 @@ public class Admin extends AppCompatActivity {
         btnadsaqlash = findViewById(R.id.btnadsaqlash);
         btnadrole = findViewById(R.id.btnadrole);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         btnadrole.setOnClickListener(this::ShowPopupMenu);
+        List<String> userList = new ArrayList<>();
+        mDatabase.child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    userList.add(ds.getKey());
+                    Toast.makeText(Admin.this, ds.getKey(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         btnadsaqlash.setOnClickListener(v -> {
             String number = ediadnum.getText().toString();
             String name = ediadname.getText().toString();
             String password = ediadpassword.getText().toString();
-            String generatedPassword = null;
-            try
-            {
-                MessageDigest md = MessageDigest.getInstance("MD5");
-                md.update(password.getBytes());
-                byte[] bytes = md.digest();
-                StringBuilder sb = new StringBuilder();
-                for (byte aByte : bytes) {
-                    sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            String role = "0";
+            //chesk userList for number
+            if (userList.contains(number)) {
+                Toast.makeText(this, "Bunday raqamli foydalanuvchi mavjud", Toast.LENGTH_SHORT).show();
+            } else {
+                if (number.isEmpty() || name.isEmpty() || password.isEmpty() || role.equals(getString(R.string.role))) {
+                    ediadname.setError("Barcha maydonlarni to'ldiring");
+                    ediadpassword.setError("Barcha maydonlarni to'ldiring");
+                    ediadnum.setError("Barcha maydonlarni to'ldiring");
+                } else {
+                    if (btnadrole.getText().toString().equals(getString(R.string.admin))) {
+                        role = "1";
+                    }
+                    if (btnadrole.getText().toString().equals(getString(R.string.shop_assistant))) {
+                        role = "2";
+                    }
+                    if (btnadrole.getText().toString().equals(getString(R.string.accountant))) {
+                        role = "3";
+                    }
+
+                    String generatedPassword = null;
+                    try {
+                        MessageDigest md = MessageDigest.getInstance("MD5");
+                        md.update(password.getBytes());
+                        byte[] bytes = md.digest();
+                        StringBuilder sb = new StringBuilder();
+                        for (byte aByte : bytes) {
+                            sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+                        }
+                        generatedPassword = sb.toString();
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(generatedPassword);
+                    //write to database Users number in name and password
+
+                    mDatabase.child("Users").child(number).child("name").setValue(name);
+                    mDatabase.child("Users").child(number).child("password").setValue(generatedPassword);
+                    mDatabase.child("Users").child(number).child("role").setValue(role);
                 }
-                generatedPassword = sb.toString();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+                Toast.makeText(this, "Foydalanuvchi saqlandi", Toast.LENGTH_SHORT).show();
             }
-            System.out.println(generatedPassword);
-            //write to database Users number in name and password
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.child("Users").child(number).child("name").setValue(name);
-            mDatabase.child("Users").child(number).child("password").setValue(generatedPassword);
-            Toast.makeText(Admin.this, "Saqlandi", Toast.LENGTH_SHORT).show();
         });
     }
+
     @SuppressLint("NonConstantResourceId")
     private void ShowPopupMenu(View v) {
         //popup menu for role
