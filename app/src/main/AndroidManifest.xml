@@ -14,6 +14,9 @@
         android:theme="@style/Theme.Topshiriq"
         tools:targetApi="31">
         <activity
+            android:name=".Admin"
+            android:exported="false" />
+        <activity
             android:name=".Sample"
             android:exported="false" />
         <activity

@@ -53,52 +53,13 @@ public class Login extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 2) {
-                    usersRef.child(s.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                String name = Objects.requireNonNull(dataSnapshot.getValue()).toString();
-                                if (!name.isEmpty()){
-                                    value = name.substring(1,2);
-                                    Toast.makeText(Login.this, value, Toast.LENGTH_SHORT).show();
-                                    names = name.substring(1, name.length() - 1).split(",")[0].split("=")[1];
-                                    txtlogname.setText(names);
-                                    password = name.substring(1, name.length() - 1).split(",")[1].split("=")[1];
-                                    Toast.makeText(Login.this, password, Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    txtlogname.setText("");
-                                }
-                            } else {
-                                Toast.makeText(Login.this, "User not found", Toast.LENGTH_SHORT).show();
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.w("TAG", "getUser:onCancelled", databaseError.toException());
-                        }
-                    });
                 }
             }
         });
 
         btnsubmit.setOnClickListener(v -> {
-            if(!edilogpass.getText().toString().isEmpty()){
-                if (edilogpass.getText().toString().equals(password)){
-                    Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Login.this,MainActivity.class);
-                    intent.putExtra("name",names);
-                    intent.putExtra("value",value);
-                    startActivity(intent);
-                }
-                else {
-                    Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
-                }
-            }else {
-                edilogpass.setError("Enter Password");
-            }
-
+           startActivity(new Intent(Login.this,Admin.class));
         });
     }
 }

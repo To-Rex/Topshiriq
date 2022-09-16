@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Topshiriq</string>
     <string name="kirish">Kirish</string>
+    <string name="number">Number</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="saqlash">Saqlash</string>
+    <string name="admin">Admin</string>
+    <string name="shop_assistant">Shop assistant</string>
+    <string name="accountant">Accountant</string>
+    <string name="role">Role</string>
 </resources>
