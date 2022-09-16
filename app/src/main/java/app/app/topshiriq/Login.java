@@ -113,12 +113,13 @@ public class Login extends AppCompatActivity {
                         Intent intent = new Intent(Login.this,Sample.class);
                         intent.putExtra("name",names);
                         intent.putExtra("role",role);
+                        intent.putExtra("id",edilogusernum.getText().toString());
+                        intent.putExtra("password",password);
                         startActivity(intent);
                         password = null;
                         edilogpass.setText(null);
                         edilogusernum.setText(null);
                         txtlogname.setText(null);
-                        finish();
                     } else {
                         Toast.makeText(Login.this, "Password is incorrect", Toast.LENGTH_SHORT).show();
                         edilogpass.setText(null);
