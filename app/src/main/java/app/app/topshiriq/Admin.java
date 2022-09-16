@@ -95,7 +95,6 @@ public class Admin extends AppCompatActivity {
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
                     }
-                    System.out.println(generatedPassword);
                     //write to database Users number in name and password
                     mDatabase.child("Users").child(number).child("name").setValue(name);
                     mDatabase.child("Users").child(number).child("password").setValue(generatedPassword);

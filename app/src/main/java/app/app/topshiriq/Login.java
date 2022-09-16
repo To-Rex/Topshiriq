@@ -3,8 +3,10 @@ package app.app.topshiriq;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,12 +21,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class Login extends AppCompatActivity {
 
-    String password,names;
-    String value;
+    String password, names;
+    String role;
+    boolean value = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,13 +59,74 @@ public class Login extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 2) {
+                    usersRef.child(edilogusernum.getText().toString()).addValueEventListener(new ValueEventListener() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                value = true;
+                                names = Objects.requireNonNull(snapshot.child("name").getValue()).toString();
+                                password = Objects.requireNonNull(snapshot.child("password").getValue()).toString();
+                                role = Objects.requireNonNull(snapshot.child("role").getValue()).toString();
+                                Toast.makeText(Login.this, password, Toast.LENGTH_SHORT).show();
+                                txtlogname.setText(names);
+                            } else {
+                                value = false;
+                                txtlogname.setText("User not found");
+                            }
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                } else {
+                    txtlogname.setText(null);
                 }
             }
         });
 
         btnsubmit.setOnClickListener(v -> {
-           startActivity(new Intent(Login.this,Admin.class));
+            if (!edilogusernum.getText().toString().isEmpty() && !edilogpass.getText().toString().isEmpty()) {
+                String edipass = null;
+                try {
+                    MessageDigest md = MessageDigest.getInstance("MD5");
+                    md.update(edilogpass.getText().toString().getBytes());
+                    byte[] bytes = md.digest();
+                    StringBuilder sb = new StringBuilder();
+                    for (byte aByte : bytes) {
+                        sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+                    }
+                    edipass = sb.toString();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(edipass+ "\n"+ password);
+                if (role.equals("0") && Objects.equals(edipass, password)) {
+                    Toast.makeText(Login.this, "Admin", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Login.this, Admin.class));
+                } else {
+                    assert edipass != null;
+                    if (edipass.equals(password)) {
+                        Intent intent = new Intent(Login.this,Sample.class);
+                        intent.putExtra("name",names);
+                        intent.putExtra("role",role);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(Login.this, "Password is incorrect", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+            } else {
+                edilogpass.setError("Please enter password");
+                edilogusernum.setError("Please enter user number");
+                Toast.makeText(Login.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> {
+                    edilogpass.setError(null);
+                    edilogusernum.setError(null);
+                }, 1500);
+            }
         });
     }
 }
