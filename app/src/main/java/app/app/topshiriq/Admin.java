@@ -44,8 +44,9 @@ public class Admin extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        btnadrole.setOnClickListener(this::ShowPopupMenu);
+
         List<String> userList = new ArrayList<>();
+
         mDatabase.child("Users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -54,12 +55,13 @@ public class Admin extends AppCompatActivity {
                     Toast.makeText(Admin.this, ds.getKey(), Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(Admin.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        btnadrole.setOnClickListener(this::ShowPopupMenu);
 
         btnadsaqlash.setOnClickListener(v -> {
             String number = ediadnum.getText().toString();
