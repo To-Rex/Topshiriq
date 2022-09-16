@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +31,7 @@ public class Admin extends AppCompatActivity {
     EditText ediadpassword;
     EditText ediadname;
     EditText ediadnum;
+    String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,6 @@ public class Admin extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
         List<String> userList = new ArrayList<>();
 
         mDatabase.child("Users").addValueEventListener(new ValueEventListener() {
@@ -52,7 +53,6 @@ public class Admin extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     userList.add(ds.getKey());
-                    Toast.makeText(Admin.this, ds.getKey(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -67,25 +67,20 @@ public class Admin extends AppCompatActivity {
             String number = ediadnum.getText().toString();
             String name = ediadname.getText().toString();
             String password = ediadpassword.getText().toString();
-            String role = "0";
             //chesk userList for number
             if (userList.contains(number)) {
                 Toast.makeText(this, "Bunday raqamli foydalanuvchi mavjud", Toast.LENGTH_SHORT).show();
             } else {
-                if (number.isEmpty() || name.isEmpty() || password.isEmpty() || role.equals(getString(R.string.role))) {
+                if (number.isEmpty() || name.isEmpty() || password.isEmpty() || btnadrole.getText().toString().equals(getString(R.string.role))) {
                     ediadname.setError("Barcha maydonlarni to'ldiring");
                     ediadpassword.setError("Barcha maydonlarni to'ldiring");
                     ediadnum.setError("Barcha maydonlarni to'ldiring");
+                    new Handler().postDelayed(() -> {
+                        ediadname.setError(null);
+                        ediadpassword.setError(null);
+                        ediadnum.setError(null);
+                    }, 1500);
                 } else {
-                    if (btnadrole.getText().toString().equals(getString(R.string.admin))) {
-                        role = "1";
-                    }
-                    if (btnadrole.getText().toString().equals(getString(R.string.shop_assistant))) {
-                        role = "2";
-                    }
-                    if (btnadrole.getText().toString().equals(getString(R.string.accountant))) {
-                        role = "3";
-                    }
 
                     String generatedPassword = null;
                     try {
@@ -102,7 +97,6 @@ public class Admin extends AppCompatActivity {
                     }
                     System.out.println(generatedPassword);
                     //write to database Users number in name and password
-
                     mDatabase.child("Users").child(number).child("name").setValue(name);
                     mDatabase.child("Users").child(number).child("password").setValue(generatedPassword);
                     mDatabase.child("Users").child(number).child("role").setValue(role);
@@ -121,12 +115,15 @@ public class Admin extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.Admin:
                     btnadrole.setText(getString(R.string.admin));
+                    role = "1";
                     return true;
                 case R.id.Shop_assistant:
                     btnadrole.setText(getString(R.string.shop_assistant));
+                    role = "2";
                     return true;
                 case R.id.accountant:
                     btnadrole.setText(getString(R.string.accountant));
+                    role = "3";
                     return true;
                 default:
                     return false;
