@@ -16,7 +16,7 @@ public class Sample extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
-
+        
         //get the intent that started this activity
         Intent intent = getIntent();
         //get the string that we passed as an extra
@@ -44,6 +44,7 @@ public class Sample extends AppCompatActivity {
         }
         tv3.setText(password);
     }
+
     //on back pressed
     /*@Override
     public void onBackPressed() {
