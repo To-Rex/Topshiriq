@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -103,8 +102,11 @@ public class Login extends AppCompatActivity {
                 }
                 System.out.println(edipass+ "\n"+ password);
                 if (role.equals("0") && Objects.equals(edipass, password)) {
-                    Toast.makeText(Login.this, "Admin", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(Login.this, Admin.class));
+                    password = null;
+                    edilogpass.setText(null);
+                    edilogusernum.setText(null);
+                    txtlogname.setText(null);
                 } else {
                     assert edipass != null;
                     if (edipass.equals(password)) {
@@ -112,12 +114,16 @@ public class Login extends AppCompatActivity {
                         intent.putExtra("name",names);
                         intent.putExtra("role",role);
                         startActivity(intent);
+                        password = null;
+                        edilogpass.setText(null);
+                        edilogusernum.setText(null);
+                        txtlogname.setText(null);
+                        finish();
                     } else {
                         Toast.makeText(Login.this, "Password is incorrect", Toast.LENGTH_SHORT).show();
+                        edilogpass.setText(null);
                     }
                 }
-
-
             } else {
                 edilogpass.setError("Please enter password");
                 edilogusernum.setError("Please enter user number");

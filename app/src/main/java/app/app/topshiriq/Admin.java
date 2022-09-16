@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -28,6 +29,7 @@ public class Admin extends AppCompatActivity {
     private DatabaseReference mDatabase;
     Button btnadrole;
     Button btnadsaqlash;
+    Button btnadall;
     EditText ediadpassword;
     EditText ediadname;
     EditText ediadnum;
@@ -37,12 +39,14 @@ public class Admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+        setTitle("Admin");
 
         ediadnum = findViewById(R.id.ediadnum);
         ediadname = findViewById(R.id.ediadname);
         ediadpassword = findViewById(R.id.ediadpassword);
         btnadsaqlash = findViewById(R.id.btnadsaqlash);
         btnadrole = findViewById(R.id.btnadrole);
+        btnadall = findViewById(R.id.btnadall);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -62,6 +66,9 @@ public class Admin extends AppCompatActivity {
         });
 
         btnadrole.setOnClickListener(this::ShowPopupMenu);
+        btnadall.setOnClickListener(v -> {
+            startActivity(new Intent(Admin.this, AllUsers.class));
+        });
 
         btnadsaqlash.setOnClickListener(v -> {
             String number = ediadnum.getText().toString();
