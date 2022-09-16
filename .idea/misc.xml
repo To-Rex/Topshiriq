@@ -4,10 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/bacgerundedittext.xml" value="0.19" />
+        <entry key="app/src/main/res/drawable/bottommenu.xml" value="0.2095" />
+        <entry key="app/src/main/res/drawable/loginedittext1.xml" value="0.2095" />
         <entry key="app/src/main/res/layout/activity_admin.xml" value="0.29791666666666666" />
+        <entry key="app/src/main/res/layout/activity_all_users.xml" value="0.29791666666666666" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2877451578776042" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2838541666666667" />
         <entry key="app/src/main/res/layout/activity_sample.xml" value="0.29791666666666666" />
+        <entry key="app/src/main/res/layout/bottomsheet.xml" value="0.2928496184172454" />
+        <entry key="app/src/main/res/layout/item.xml" value="0.296875" />
         <entry key="app/src/main/res/menu/role.xml" value="0.1" />
       </map>
     </option>

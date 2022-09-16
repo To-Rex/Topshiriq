@@ -101,4 +101,15 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="@+id/guideline5" />
 
+    <Button
+        android:id="@+id/btnadall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bacgerundedittext"
+        android:text="@string/read_all_users"
+        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toBottomOf="@+id/btnadsaqlash" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

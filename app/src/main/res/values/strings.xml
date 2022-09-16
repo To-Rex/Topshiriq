@@ -9,4 +9,5 @@
     <string name="shop_assistant">Shop assistant</string>
     <string name="accountant">Accountant</string>
     <string name="role">Role</string>
+    <string name="read_all_users">Read All Users</string>
 </resources>
